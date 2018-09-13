@@ -1,0 +1,36 @@
+{
+  "name": "stratus",
+  "version": "1.0.0",
+  "description": "Predicts solar power generation based on forecasts of weather data.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"ERROR: No test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alberto-X/Stratus.git"
+  },
+  "keywords": [
+    "stratus",
+    "PV",
+    "generation",
+    "solar",
+    "power",
+    "predictions",
+    "estimates",
+    "weather",
+    "forecast",
+    "cloud",
+    "cover",
+    "infrared",
+    "radiation",
+    "irradiance"
+  ],
+  "author": "Alberto Romañach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alberto-X/Stratus/issues"
+  },
+  "homepage": "https://github.com/Alberto-X/Stratus#readme"
+}
