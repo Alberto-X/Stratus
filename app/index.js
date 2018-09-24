@@ -1,12 +1,20 @@
 // app/index.js
-const calc = require('./calc')
-const numbersToAdd = [
-    2,
-    3,
-    5,
-    8,
-    13
-]
+const express = require('express')
+const app = express()
+const port = 4000
 
-const result = calc.sum(numbersToAdd)
-console.log(`The result is: ${result}.`)
+app.get('/', (request, response) => {
+    response.send('Whatcha need?')
+    console.log(' \'/\' request served.')
+})
+
+app.get('/hello', (request, response) => {
+    response.send('Hello from Express!')
+})
+
+app.listen(port, (err) => {
+    if (err) {
+        console.log('Something bad happened, while listening', err)
+    }
+    console.log(`Server is listening on ${port}`)
+})
