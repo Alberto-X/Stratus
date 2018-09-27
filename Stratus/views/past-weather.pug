@@ -1,0 +1,15 @@
+﻿extends layout
+
+block content
+  h1= title
+  - var sentence_desc = description.charAt(0).toUpperCase() + description.slice(1) + '.';
+  p #{sentence_desc}
+  br
+
+  p(id='python-data')= data
+    if refr_count
+      each i in refr_count
+        | , again
+      | .
+  br
+  a(href='/') Home
