@@ -6,6 +6,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var firebase = require('firebase');
+
+// FIREBASE initialize
+const config = {
+    apiKey: "AIzaSyDTONkPp6ggftk4WD4XEdoxcdAF3Wq1WCs",
+    authDomain: "sandbox-7fa23.firebaseapp.com",
+    databaseURL: "https://sandbox-7fa23.firebaseio.com",
+    projectId: "sandbox-7fa23",
+    storageBucket: "sandbox-7fa23.appspot.com",
+    messagingSenderId: "892221273877"
+};
+firebase.initializeApp(config);
+firebase.database().ref().child('user');
 
 // ROUTES
 var routes = require('./routes/index');
@@ -25,6 +38,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); //?
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");//?
+    next();
+});
 
 app.use('/', routes);
 app.use('/past-weather', past_weather);
