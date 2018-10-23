@@ -22,7 +22,7 @@ firebase.database().ref().child('user');
 
 // ROUTES
 var routes = require('./routes/index');
-var past_weather = require('./routes/past-weather');
+var current_weather = require('./routes/current-weather');
 
 var app = express();
 
@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
-app.use('/past-weather', past_weather);
+app.use('/current-weather', current_weather);
 
 // ERROR HANDLING
 // Catch 404 and forward to error handler

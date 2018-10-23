@@ -10,7 +10,10 @@ var counter = 1;
 function getData(){
     let location = document.getElementById('input-location');
     console.log(location.value);
-    axios({
+
+    //GetDataFromPython(location, 0);
+
+    /*axios({
         method: 'get',
         url: 'https://api.darksky.net/forecast/'+API_KEY_DARKSKY+'/' +LOCATIONS[location.value],
         headers: {
@@ -37,5 +40,19 @@ function getData(){
         }
     }).catch(function(error) {
         console.log(error);
+    })*/
+}
+
+function GetDataFromPython(req, res) {
+    var spawn = require('child_process').spawn;
+    const scriptExecution = spawn(PYTHON_PATH, ['dark_sky_data_grab.py','arg1', 'arg2']);
+    
+    //Set listener to be executed when stdout is written to by python
+    scriptExecution.stdout.on('data', function (rawdata) {
+        //Convert data from python to readable string
+        let pyData = String.fromCharCode.apply(null, rawdata);
+        myData = pyData;
+        console.log(pyData);
+        console.log('python done.');
     })
 }
