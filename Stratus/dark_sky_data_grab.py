@@ -1,21 +1,39 @@
 # importing the requests library 
 import requests
+import json
+import sys
+import datetime
 
-def unix_time_seconds(dt): #its going to treat it as GMT, so it will be early by 5 hours
-    return (dt - epoch).total_seconds() + 18000
-#https://api.darksky.net/forecast/[key]/[latitude],[longitude]
-# 26.862517 N, -81.745393 W
-#lines 4 to 52564
+
 key = 'a71beeb0c8a084275e2c356b049dff52'
-latitude = '40.0022469'
-longitude = '-83.0156818'
+latitude = sys.argv[1]
+longitude = sys.argv[2]
 r = requests.get('https://api.darksky.net/forecast/' + key +'/' + latitude + ',' + longitude)
-json = r.json()
-print(json['currently'])
-hoursAhead = 0
-for element in json['hourly']['data']:
-	print('Hours ahead: ' + str(hoursAhead))
-	print('p: ' + str(element['precipProbability']) +', c: '+ str(element['cloudCover']))
-	hoursAhead += 1
-for element in json['hourly']['data']:
-	print(element)
+forecast = r.json()
+fore_dict = "{\"currently\":"
+
+#Makes a json entry for needed current weather data
+cur = forecast["currently"]
+time = "\"time\":" + str(cur["time"])
+temp = "\"temp\":" + str(cur["temperature"])
+cloud_cover = "\"cloud\":" + str(cur["cloudCover"])
+ozone = "\"ozone\":" + str(cur["ozone"])
+	
+cur_dict = "{" + time + "," + temp + "," + cloud_cover + "," + ozone + "},"
+fore_dict += cur_dict
+
+#Makes a dictionary for every future hour avalible
+fore_dict += "\"hourly\":["
+for e in forecast["hourly"]["data"]:
+	time = "\"time\":" + str(e["time"])
+	temp = "\"temp\":" + str(e["temperature"])
+	cloud_cover = "\"cloud\":" + str(e["cloudCover"])
+	ozone = "\"ozone\":" + str(e["ozone"])
+	
+	hour_dict = "{" + time + "," + temp + "," + cloud_cover + "," + ozone + "},"
+	fore_dict += hour_dict
+fore_dict = fore_dict[0:-1] + "]}"
+
+print(fore_dict)
+
+

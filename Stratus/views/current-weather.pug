@@ -7,17 +7,13 @@ block content
   br
 
   b Location:
-  select(id='input-location' name="input-location" value='babcock')
-    option(value='babcock') Babcock
-    option(value='mountainview') Mountainview
-    option(value='westside') Westside
+  select(id='input-location' name="input-location" value='babcock' lat='0' long='0')
+    option(value='babcock' lat='0' long='0') Babcock
+    option(value='mountainview' lat='100' long='100') Mountainview
+    option(value='westside' lat='100' long='-100') Westside
   b Continuous Refresh
   input(id='input-live-refresh' onclick='getData()' type='checkbox', name='input-live-refresh', checked)
 
-  table
-      tr
-        td [Request #
-        td(id='counter') ]
 
   div(id='dark-sky-data')
     p= data
