@@ -41,11 +41,9 @@ function Forecast(json){
         }
     }
 }
-/* GET 'past weather' page. */
+/* GET 'current weather' page. */
 router.get('/', function (req, res) {
-    //res.header("Access-Control-Allow-Origin", "*");
-    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    GetDataFromPython(req, res); 
+    GetDataFromPython(req, res);
 });
 
 //NOTE: need to use 'AXIOS' library to request data asynchronously, via url
@@ -60,7 +58,7 @@ function GetDataFromPython(req, res) {
         var forecast = JSON.parse(pyData);
         var data = new Forecast(forecast);
         
-        console.log(pyData);
+        //console.log(pyData);
         console.log('python done.');
 
         res.render('current-weather', {
@@ -68,6 +66,7 @@ function GetDataFromPython(req, res) {
             title: 'Current Weather Data',
             description: 'displays weather data from right now',
             data: pyData,
+            counter: 0
         })
     })
 }
