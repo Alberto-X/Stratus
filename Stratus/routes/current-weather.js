@@ -22,7 +22,7 @@ function GetDataFromPython(req, res) {
     scriptExecution.stdout.on('data', function (rawdata) {
         //Convert data from python to readable string
         let pyData = String.fromCharCode.apply(null, rawdata);
-        var forecast = JSON.parse(pyData);
+        forecast = JSON.parse(pyData);
         
         console.log(pyData);
         console.log('python done.');
