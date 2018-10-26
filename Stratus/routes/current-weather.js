@@ -21,6 +21,7 @@ function Forecast(json){
     this.mode = "current";
     this.data = this.current;
     for(var x in json.hourly){
+        x = json.hourly[i];
         this.hourly.push(new WeatherData(x.time, x.temp, x.cloud, x.ozone));
     }
 
