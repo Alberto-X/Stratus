@@ -1,12 +1,15 @@
 ﻿'use strict';
 var debug = require('debug');
 var express = require('express');
+var http = require('http');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var firebase = require('firebase');
+
+var getDataFn = require('./getWeatherData.js');
 
 // FIREBASE initialize
 const config = {
@@ -25,6 +28,8 @@ var routes = require('./routes/index');
 var current_weather = require('./routes/current-weather');
 
 var app = express();
+var constants = require('./constants.js');
+app.locals = Object.assign(constants, app.locals);
 
 // VIEW ENGINE setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,12 +44,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); //?
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");//?
-    next();
-});
-
+// ROUTING
 app.use('/', routes);
 app.use('/current-weather', current_weather);
 
@@ -80,9 +80,32 @@ app.use(function (err, req, res, next) {
 app.set('port', process.env.PORT || 1338);
 
 // START SERVER
-var server = app.listen(app.get('port'), function (err) {
+var server = http.createServer(app);
+server.listen(app.get('port'), function (err) {
     if (err) {
         return console.log(`>>ERROR: ${err.message}`);
     }
     console.log('Express server listening on port ' + server.address().port);
 });
+
+// OPEN SOCKET
+var io = require('socket.io')(server);
+io.on('connection', function(nodeSocket) {
+    console.log('>> Socket connected.');
+    app.locals.socket = nodeSocket;
+    
+    nodeSocket.on('location', function(loc) {
+        // Update selected location
+        console.log(`>> Location updated: ${loc}`);
+        app.locals.location = loc;
+
+        // Clear an unfinished request for data
+        clearTimeout(app.locals.getDataReqID);
+
+        // Re-request data
+        setTimeout(getDataFn, 0, app);
+    })
+})
+
+app.locals.location = 'babcock';  //todo: refactor
+setTimeout(getDataFn, 0, app);
