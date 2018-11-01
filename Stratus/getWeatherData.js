@@ -14,9 +14,9 @@ module.exports = getWeatherData;
 
 function retrieveDataViaPython(args) {
     var app = args.app;
-    var API_KEY = args.API_KEY
+    var API_KEY = args.API_KEY;
     var location = args.location;
-    var Forecast = require('./dataModel');
+    let Forecast = require('./dataModel');
 
     var spawn = require('child_process').spawn;
     const scriptExecution = spawn(app.locals.PYTHON_PATH, ['dark_sky_data_grab.py', location[0], location[1]]);
@@ -27,11 +27,11 @@ function retrieveDataViaPython(args) {
 
         //Convert data from python to readable string
         let pyData = String.fromCharCode.apply(null, rawdata);
-        var forecast = processDarkSkyData(JSON.parse(pyData));
+        var f = new Forecast(pyData).forcast;
         
-        //var data = new Forecast(forecast);
+        //console.log(JSON.parse(pyData));
         if(app.locals.socket) {
-            app.locals.socket.emit('ds-data', forecast);
+            app.locals.socket.emit('ds-data', f);
         }
 
         // Request data after 5 seconds
@@ -67,6 +67,5 @@ function retrieveDataFromDarkSky(args) {
 }
 
 function processDarkSkyData(data) {
-
     return JSON.stringify(data);
 }
