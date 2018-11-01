@@ -10,6 +10,7 @@ block content
         $('#ds-currently').html(`
         <table>
           <tr>
+            <th>Date</th>
             <th>Time</th>
             <th>Temp</th>
             <th>Cloud</th>
@@ -18,6 +19,7 @@ block content
             <th>Power Prediction</th>
           </tr>
           <tr>
+            <td>${data["currently"]["day"]}
             <td>${data["currently"]["time"]}</td>
             <td>${data["currently"]["temp"]}</td>
             <td>${data["currently"]["cloud"]}</td>
