@@ -2,6 +2,7 @@
 import requests
 import json
 import sys
+import os
 import datetime
 
 
@@ -35,5 +36,3 @@ for e in forecast["hourly"]["data"]:
 fore_dict = fore_dict[0:-1] + "]}"
 
 print(fore_dict)
-
-
