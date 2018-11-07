@@ -1,27 +1,55 @@
 ﻿extends layout
 
 block content
+  script.
+    $(document).ready(function() {
+      socket.on('ds-data', function(newData) {
+        console.log('received data on browser');
+        var data = JSON.parse(newData);
+        console.log(data);
+        $('#ds-currently').html(`
+        <table>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Temp</th>
+            <th>Cloud</th>
+            <th>Ozone</th>
+            <th/>
+            <th>Power Prediction</th>
+          </tr>
+          <tr>
+            <td>${data["currently"]["day"]}
+            <td>${data["currently"]["time"]}</td>
+            <td>${data["currently"]["temp"]}</td>
+            <td>${data["currently"]["cloud"]}</td>
+            <td>${data["currently"]["ozone"]}</td>
+            <td/>
+            <td>??</td>
+          </tr>
+        </table>`);
+        $('#ds-hourly').html(`<p>${JSON.stringify(data["hourly"])}</p>`);
+      })
+    })
+    
+
   h1= title
   - var sentence_desc = description.charAt(0).toUpperCase() + description.slice(1) + '.';
   p #{sentence_desc}
   br
 
   b Location:
-  select(id='input-location' name="input-location" value='babcock')
-    option(value='babcock') Babcock
-    option(value='mountainview') Mountainview
-    option(value='westside') Westside
-  b Continuous Refresh
-  input(id='input-live-refresh' onclick='getData()' type='checkbox', name='input-live-refresh', checked)
-
-  table
-      tr
-        td [Request #
-        td(id='counter') ]
+  select(id='input-location' onchange='updateLocation(this)' name="input-location" value='babcock')
+    option(id='b-location' value='babcock') Babcock
+    option(id='m-location' value='mountainview') Mountainview
+    option(id='w-location' value='westside') Westside
 
   div(id='dark-sky-data')
-    p= data
-  //script getData();
+    ul
+      li
+        div(id='ds-currently')
+      li
+        div(id='ds-hourly')
 
   br
   br

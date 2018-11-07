@@ -1,3 +1,4 @@
+//var axios = require('axios');
 const API_KEY_DARKSKY = '1ebe35348caf124d5d1eb18889ec9376';
 const LOCATIONS = {
     'babcock': '26.862517,-81.745393',
@@ -12,35 +13,6 @@ function getData(){
     console.log(location.value);
 
     //GetDataFromPython(location, 0);
-
-    /*axios({
-        method: 'get',
-        url: 'https://api.darksky.net/forecast/'+API_KEY_DARKSKY+'/' +LOCATIONS[location.value],
-        headers: {
-            'Access-Control-Allow-Origin': '*', //?
-            'Access-Control-Allow-Credentials': true, //?
-        },
-        params: {},
-        responseType: 'json',
-        timeout: 10000,
-        proxy: {
-            host: 'https://api.darksky.net'
-        }
-    }).then(function(response) {
-        console.log(response.data);
-        let darkSkyData = document.getElementById('dark-sky-data')
-        let counterData = document.getElementById('counter')
-        let liveRefresh = document.getElementById('input-live-refresh')
-        
-        if (liveRefresh.checked) {
-            darkSkyData.innerHTML = response.data;
-            counterData.innerHTML = counter + ']';
-            counter += 1;
-            setTimeout(getData, 5000);
-        }
-    }).catch(function(error) {
-        console.log(error);
-    })*/
 }
 
 function GetDataFromPython(req, res) {
@@ -55,4 +27,16 @@ function GetDataFromPython(req, res) {
         console.log(pyData);
         console.log('python done.');
     })
+}
+
+function updateLocation(location) {
+    console.log(location.value);
+    
+    $(document).ready(function() {
+        socket.emit('location', location.value);
+    })
+}
+
+function updateDarkSkyData() {
+
 }
