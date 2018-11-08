@@ -7,7 +7,6 @@ function getWeatherData(app) {
     }
 
     // Retrieve Data
-    //retrieveDataFromDarkSky(args);
     retrieveDataViaPython(args);
 }
 module.exports = getWeatherData;
@@ -27,9 +26,8 @@ function retrieveDataViaPython(args) {
 
         //Convert data from python to readable string
         let pyData = String.fromCharCode.apply(null, rawdata);
-        var f = new Forecast(pyData).forcast;
+        var f = new Forecast(pyData).forecast;
         
-        //console.log(JSON.parse(pyData));
         if(app.locals.socket) {
             app.locals.socket.emit('ds-data', f);
         }

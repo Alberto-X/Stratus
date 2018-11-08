@@ -1,70 +1,48 @@
 function Forecast(f){
+    const tAdj = 1000;
     var json = JSON.parse(f);
-    var c = json.currently;
-    this.current = new WeatherData(c.time, c.temp, c.cloud, c.ozone);
+    this.current = new WeatherData(json.currently);
     this.hourly = [];
-    for(var x in json.hourly){
-        y = json.hourly[x];
-        this.hourly.push(new WeatherData(y.time, y.temp, y.cloud, y.ozone));
+    for(var i in json.hourly){
+        var x = json.hourly[i];
+        this.hourly.push(new WeatherData(x));
     }
     this.tracker = 0;
-    this.mode = "current";
-    this.data = this.current;
+    this.forecast = getForecast(this);
 
-    //console.log(this.hourly);
-    this.forcast = getForecast(this);
-
-    this.changeMode = function(){
-        if(this.mode == "current"){
-            this.mode = "hourly";
-            this.data = this.hourly[this.tracker];
-        } else {
-            this.mode = "current";
-            this.data = this.current;
-        }
-    }
-
-    this.changeHour = function(inc){
-        this.tracker += inc;
+    this.changeHour = function(i){
+        this.tracker += i;
         if(this.mode = "hourly"){
             this.data = this.hourly[this.tracker];
         }
     }
 
     function getForecast(t){
-        var ret = new Object();
-
-        ret.currently = t.current.getData();
-        ret.hourly = []; 
-
-        for(var x in t.hourly){
-            y = t.hourly[x];
-            ret.hourly.push(y.getData());
+        var ret = {
+            "currently" : t.current.getData(),
+            "hourly" : t.hourly
         }
-
         return JSON.stringify(ret);
     }
-}
+    function WeatherData(x){
+        this.date = setTime(new Date(x.time * tAdj));
+        this.temp = x.temp;
+        this.cldCvr = x.cloud;
+        this.ozone = x.ozone;
 
-function WeatherData(time, temp, cld, ozn){
-    this.date = setTime(new Date(time * 1000));
-    this.temp = temp;
-    this.cldCvr = cld;
-    this.ozone = ozn;
-    
+        function setTime(t){
+            var hrs = t.getHours() + ":";
+            var min = t.getMinutes() +":";
+            var sec = t.getSeconds() + "";
+            var day = t.toDateString();
 
-    function setTime(x){
-        var hrs = x.getHours() + ":";
-        var min = x.getMinutes() +":";
-        var sec = x.getSeconds() + "";
-        var day = x.toDateString();
+            return {"day":day ,"time":(hrs + min + sec)};
+        }
 
-        return {"day":day ,"time":(hrs + min + sec)};
-    }
-
-    this.getData = function(){
-        return {"day":this.date.day, "time":this.date.time,
-         "temp":this.temp, "cloud":this.cldCvr, "ozone":this.ozone};
+        this.getData = function(){
+            return {"day":this.date.day, "time":this.date.time,
+            "temp":this.temp, "cloud":this.cldCvr, "ozone":this.ozone};
+        }
     }
 }
 
