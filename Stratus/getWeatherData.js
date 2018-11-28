@@ -7,7 +7,7 @@ function getWeatherData(app) {
     }
 
     // Retrieve Data
-    retrieveDataFromDarkSky(args);
+    retrieveDataViaPython(args);
 }
 module.exports = getWeatherData;
 
