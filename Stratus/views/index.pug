@@ -3,6 +3,36 @@
 block content
   h1= title
   p Welcome to #{title}, #{description}.
-
   br
-  a(href='/current-weather') Current Weather Data
+
+  form(action="/current-weather", method="post")
+    label(for='api-key') API Key:
+    input(type='password' id='api-key' name='api-key' size='32')
+    br
+
+    label(for='input-location') Location:
+    select(id='input-location' onchange='updateLocation(this)' name="input-location" value='babcock')
+      option(id='b-location' value='babcock') Babcock
+      option(id='m-location' value='mountainview') Mountainview
+      option(id='w-location' value='westside') Westside
+    br
+
+    input(type='submit' value='View')
+    input(type='checkbox' id='test' checked)
+    |(for testing)
+  br
+
+  table
+    tr
+      th= 'Date'
+      th= 'Time'
+      th= 'Temperature'
+      th= 'Cloud Coverage'
+      th= 'Ozone'
+      th= 'Power Prediction'
+    for item in data
+      tr
+        for elem in item
+          td= elem
+        td= '?'
+    
