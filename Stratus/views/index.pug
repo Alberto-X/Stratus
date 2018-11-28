@@ -5,21 +5,17 @@ block content
   p Welcome to #{title}, #{description}.
   br
 
-  form(action="/current-weather", method="post")
-    label(for='api-key') API Key:
-    input(type='password' id='api-key' name='api-key' size='32')
-    br
 
-    label(for='input-location') Location:
-    select(id='input-location' onchange='updateLocation(this)' name="input-location" value='babcock')
-      option(id='b-location' value='babcock') Babcock
-      option(id='m-location' value='mountainview') Mountainview
-      option(id='w-location' value='westside') Westside
-    br
+  label(for='input-location') Location:
+  select(id='input-location' onchange='updateLocation(this)' name="input-location")
+    option(id='b-location' value='babcock') Babcock
+    option(id='m-location' value='mountainview') Mountainview
+    option(id='w-location' value='westside') Westside
+  br
 
-    input(type='submit' value='View')
-    input(type='checkbox' id='test' checked)
-    |(for testing)
+  input(type='submit' value='View')
+  input(type='checkbox' id='test' checked)
+  |(for testing)
   br
 
   table
