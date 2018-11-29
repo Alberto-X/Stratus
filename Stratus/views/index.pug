@@ -30,16 +30,16 @@ block content
 
         // CONSTRUCT TABLE HEADER
         var headerHTML = "<tr>\n";
-        for (const factor of Object.keys(brows.FACTOR_LIST_DESC)) {
-          headerHTML += `<th>${brows.FACTOR_LIST_DESC[factor]}</th>\n`;
-        }
+        Object.entries(brows.FACTOR_LIST_DESC).forEach(function(factor) {
+          headerHTML += `<th>${factor[1]}</th>\n`;
+        })
         headerHTML += "</tr>\n";
 
         // CONSTRUCT TABLE BODY for currently
         var currentlyHTML = "<tr>\n";
-        for (index in data.currently) {
-          currentlyHTML += `<td>${data.currently[index]}</td>\n`;
-        }
+        Object.entries(data.currently).forEach(function(entry) {
+          currentlyHTML += `<td>${entry[1]}</td>\n`;
+        })
         currentlyHTML += "</tr>\n";
 
         // CONSTRUCT TABLE BODY for hourly

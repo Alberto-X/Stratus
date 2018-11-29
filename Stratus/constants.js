@@ -8,6 +8,7 @@ module.exports = {
     },
 
     FACTOR_LIST_DESC : {
+        'date' : 'Date',
         'time' : 'Time',
         'temperature' : 'Temperature',
         'cloudCover' : 'Cloud Cover',

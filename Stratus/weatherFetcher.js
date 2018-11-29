@@ -76,19 +76,36 @@ function processDarkSkyData(app, jsonData) {
     var processed = {};
 
     // SELECT DATA based on FACTOR_LIST
-    // NOTE: becomes list, no longer keyed by name of the factors
-    var currently = app.locals.FACTOR_LIST.map(function(factor) {
-        return data.currently[factor];
+    var currently = {};
+    app.locals.FACTOR_LIST.map(function(factor) {
+        currently[factor] = data.currently[factor];
     })
-    var hourly = data.hourly.data.map(function(hourlyPred) {
+    var hourly = {};
+    data.hourly.data.map(function(hourlyPred) {
         return app.locals.FACTOR_LIST.map(function(factor) {
-            return hourlyPred[factor]
+            hourly[factor] = hourlyPred[factor];
         })
     })
-    
+
+    // REFORMAT TIME
+    var tAdj = 1000;
+    var date = new Date(currently.time * tAdj);
+    var time = formatTime(date);
+    var dateStr = date.toDateString();
+    currently.time = time;
+    currently.date = dateStr;
+
     processed = {
         'currently': currently,
         'hourly' : hourly
     }
     return JSON.stringify(processed);
+}
+
+
+function formatTime(t){
+    var hrs = t.getHours() + ":";
+    var min = t.getMinutes() +":";
+    var sec = t.getSeconds() + "";
+    return hrs + min + sec;
 }
