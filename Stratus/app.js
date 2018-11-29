@@ -9,7 +9,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var firebase = require('firebase');
 
-var getDataFn = require('./getWeatherData.js');
+var weatherFetcher = require('./weatherFetcher');
 
 // FIREBASE initialize
 const config = {
@@ -27,9 +27,15 @@ firebase.database().ref().child('user');
 var routes = require('./routes/index');
 var current_weather = require('./routes/current-weather');
 
+// INITIALIZE APP and constants
 var app = express();
 var constants = require('./constants.js');
+constants.FACTOR_LIST = [];
+for (const factor of Object.keys(constants.FACTOR_LIST_DESC)) {
+    constants.FACTOR_LIST.push(factor);
+}
 app.locals = Object.assign(constants, app.locals);
+
 
 // VIEW ENGINE setup
 app.set('views', path.join(__dirname, 'views'));
@@ -94,18 +100,12 @@ io.on('connection', function(nodeSocket) {
     console.log('>> Socket connected.');
     app.locals.socket = nodeSocket;
     
-    nodeSocket.on('location', function(loc) {
-        // Update selected location
-        console.log(`>> Location updated: ${loc}`);
-        app.locals.location = loc;
-
-        // Clear an unfinished request for data
-        clearTimeout(app.locals.getDataReqID);
-
-        // Re-request data
-        setTimeout(getDataFn, 0, app);
-    })
+    // INITIALIZE constants on browser
+    var browserConstants = {
+        'FACTOR_LIST': app.locals.FACTOR_LIST,
+        'FACTOR_LIST_DESC': app.locals.FACTOR_LIST_DESC
+    };
+    nodeSocket.emit('constants', browserConstants);
 })
 
 app.locals.location = 'babcock';  //todo: refactor
-setTimeout(getDataFn, 0, app);

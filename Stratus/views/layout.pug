@@ -8,6 +8,18 @@ html
     script(src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous")
     script.
       var socket = io();
+      var brows = {};
+
+      // INITIALIZE constants
+      $(document).ready(function() {
+        socket.on('constants', function(constants) {
+          console.log(constants);
+          for (cons in constants) {
+            brows[cons] = constants[cons];
+          }
+        })
+      })
+
     script(src='https://unpkg.com/vue')
     script(src='https://unpkg.com/axios/dist/axios.min.js')
   body

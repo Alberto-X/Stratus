@@ -5,30 +5,52 @@ block content
   p Welcome to #{title}, #{description}.
   br
 
+  form(method="post")
+    label(for="apikey") API Key:
+    input(type='text' name='apikey')
+    br
+    label(for='location') Location:
+    select(name="location" onchange='updateLocation(this)')
+      option(id='b-location' value='babcock') Babcock
+      option(id='m-location' value='mountainview') Mountainview
+      option(id='w-location' value='westside' checked) Westside
+    br
 
-  label(for='input-location') Location:
-  select(id='input-location' onchange='updateLocation(this)' name="input-location")
-    option(id='b-location' value='babcock') Babcock
-    option(id='m-location' value='mountainview') Mountainview
-    option(id='w-location' value='westside') Westside
+    input(type='submit' value='View')
+    input(type='checkbox' id='test' checked)
+    |(for testing)
   br
 
-  input(type='submit' value='View')
-  input(type='checkbox' id='test' checked)
-  |(for testing)
-  br
+  script.
+    //use jquery to access DOM elements
+    $(document).ready(function() {
+      socket.on('ds-data', function(newData) {
+        console.log('received data on browser');
+        var data = JSON.parse(newData);
 
-  table
-    tr
-      th= 'Date'
-      th= 'Time'
-      th= 'Temperature'
-      th= 'Cloud Coverage'
-      th= 'Ozone'
-      th= 'Power Prediction'
-    for item in data
-      tr
-        for elem in item
-          td= elem
-        td= '?'
-    
+        // CONSTRUCT TABLE HEADER
+        var headerHTML = "<tr>\n";
+        for (const factor of Object.keys(brows.FACTOR_LIST_DESC)) {
+          headerHTML += `<th>${brows.FACTOR_LIST_DESC[factor]}</th>\n`;
+        }
+        headerHTML += "</tr>\n";
+
+        // CONSTRUCT TABLE BODY for currently
+        var currentlyHTML = "<tr>\n";
+        for (index in data.currently) {
+          currentlyHTML += `<td>${data.currently[index]}</td>\n`;
+        }
+        currentlyHTML += "</tr>\n";
+
+        // CONSTRUCT TABLE BODY for hourly
+        var hourlyHTML = "<tr>\n";
+
+        hourlyHTML += "</tr>\n";
+
+        $('#weather-currently').html(`<table>${headerHTML}${currentlyHTML}</table>\n`);
+        $('#weather-hourly').html(hourlyHTML);
+      })
+    })
+  
+  div(id='weather-currently')
+  div(id='weather-hourly')

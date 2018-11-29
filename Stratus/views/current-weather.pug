@@ -2,6 +2,7 @@
 
 block content
   script.
+    //use jquery to access DOM elements
     $(document).ready(function() {
       socket.on('ds-data', function(newData) {
         console.log('received data on browser');
@@ -19,10 +20,9 @@ block content
             <th>Power Prediction</th>
           </tr>
           <tr>
-            <td>${data["currently"]["day"]}
             <td>${data["currently"]["time"]}</td>
-            <td>${data["currently"]["temp"]}</td>
-            <td>${data["currently"]["cloud"]}</td>
+            <td>${data["currently"]["temperature"]}</td>
+            <td>${data["currently"]["cloudCover"]}</td>
             <td>${data["currently"]["ozone"]}</td>
             <td/>
             <td>??</td>
