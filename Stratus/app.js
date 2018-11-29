@@ -9,8 +9,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var firebase = require('firebase');
 
-var weatherFetcher = require('./weatherFetcher');
-
 // FIREBASE initialize
 const config = {
     apiKey: "AIzaSyDTONkPp6ggftk4WD4XEdoxcdAF3Wq1WCs",

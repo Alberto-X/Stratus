@@ -3,9 +3,27 @@
 ##############################
 
 import sys
+import json
+import numbers
 
-# PARAMETERS
-forecast = sys.argv[1]
+# READ PARAMETERS
+jsonForecast = sys.argv[1]
+forecast = json.loads(jsonForecast)
 
-print(forecast)
-print(forecast.currently)
+# CURRENTLY PREDICTION
+sum = 0.0
+for factor, value in forecast['currently'].items():
+    if (isinstance(value, numbers.Number)):
+        sum += value
+print(sum)
+
+# HOURLY PREDICTION
+sums = []
+for hourlyPred in forecast['hourly']['data']:
+    sum = 0.0
+    for factor, value in hourlyPred.items():
+        if (isinstance(value, numbers.Number)):
+            sum += value
+    sums.append(sum)
+print(sums)
+

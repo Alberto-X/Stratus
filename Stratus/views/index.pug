@@ -6,19 +6,26 @@ block content
   br
 
   form(method="post")
-    label(for="apikey") API Key:
+    label(for='apikey') API Key:
     input(type='text' name='apikey')
     br
     label(for='location') Location:
-    select(name="location" onchange='updateLocation(this)')
-      option(id='b-location' value='babcock') Babcock
-      option(id='m-location' value='mountainview') Mountainview
-      option(id='w-location' value='westside' checked) Westside
-    br
+    select(id='locationID' name='location' onchange='updateLocation(this)')
+      option(id='b-location' value='Babcock') Babcock
+      option(id='m-location' value='Mountainview') Mountainview
+      option(id='w-location' value='Westside') Westside
 
+    script.
+      console.log(location);
+      $("#locationID").val(location);
+      
+    br
     input(type='submit' value='View')
-    input(type='checkbox' id='test' checked)
-    |(for testing)
+  br
+
+  hr
+  
+  p Location: #{location}
   br
 
   script.
@@ -38,17 +45,24 @@ block content
         // CONSTRUCT TABLE BODY for currently
         var currentlyHTML = "<tr>\n";
         Object.entries(data.currently).forEach(function(entry) {
-          currentlyHTML += `<td>${entry[1]}</td>\n`;
+          var clas = "";
+          if (entry[0] == "power") {
+            clas = "class=power";
+          }
+          currentlyHTML += `<td ${clas}>${entry[1]}</td>\n`;
         })
         currentlyHTML += "</tr>\n";
 
         // CONSTRUCT TABLE BODY for hourly
         var hourlyHTML = "";
         data.hourly.data.forEach(function(hourlyPred) {
-          console.log(hourlyPred);
           hourlyHTML += "<tr>\n"
           Object.entries(hourlyPred).forEach(function(entry) {
-            hourlyHTML += `<td>${entry[1]}</td>\n`;
+            var clas = "";
+            if (entry[0] == "power") {
+              clas = "class=power";
+            }
+            hourlyHTML += `<td ${clas}>${entry[1]}</td>\n`;
           })
           hourlyHTML += "</tr>\n";
         })
@@ -60,8 +74,8 @@ block content
   
   h2 Current Weather
   div(id='weather-currently')
-    p Waiting for selection...
+    p [Waiting for selection...]
   br
   h2 Forecast
   div(id='weather-hourly')
-    p Waiting for selection...
+    p [Waiting for selection...]

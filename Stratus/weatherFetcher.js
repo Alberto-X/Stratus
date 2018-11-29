@@ -45,6 +45,7 @@ function retrieveDataViaPython(args) {
 
 function retrieveDataFromDarkSky(args) {
     var axios = require('axios');
+    var Predictor = require('./predictor');
     var app = args.app;
     var apikey = args.apikey
     var coords = app.locals.LOCATIONS[args.location]   //lookup coordinates for given location
@@ -56,16 +57,12 @@ function retrieveDataFromDarkSky(args) {
         responseType: 'json',
         timeout: 10000,
     }).then(function(response) {
+        // DATA RECEIVED, then pretty-ify it
         console.log(`>> DarkSky polled. socket: ${app.locals.socket}`);
         var formattedData = processDarkSkyData(app, response.data);
 
-        // Send DarkSky data to browser via socket
-        if(app.locals.socket) {
-            app.locals.socket.emit('ds-data', formattedData);
-        }
-
-        // Request data after 10 seconds
-        app.locals.weatherReqID = setTimeout(getWeather, 10000, app, args.apikey, args.location);
+        // SEND DATA TO PREDICTOR
+        app.locals.predictReqID = setTimeout(Predictor.predict, 0, app, formattedData, args);
     }).catch(function(error) {
         console.log(error);
     })
@@ -112,9 +109,8 @@ function processDarkSkyData(app, jsonData) {
         'currently': currently,
         'hourly' : hourly
     }
-    return JSON.stringify(processed);
+    return processed;
 }
-
 
 function formatTime(t){
     var hrs = t.getHours() + ":";

@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
         url: req.path,
         title: 'Stratus',
         description: "a predictor of solar power output",
-        data: [["one"],["two"]],
+        location: "[waiting...]",
     });
 });
 
@@ -28,7 +28,8 @@ router.post('/', function (req, res) {
         url: req.path,
         title: 'Stratus',
         description: "a predictor of solar power output",
-        data: [["post"],["received"]]});
+        location: req.body.location
+    })
 })
 
 module.exports = router;

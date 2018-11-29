@@ -22,3 +22,9 @@ table, th, td {
 th, td {
     padding: 10px;
 }
+
+.power {
+    font-weight: 600;
+    color: #ff3300;
+    background: #c0edff
+}
