@@ -81,10 +81,15 @@ function processDarkSkyData(app, jsonData) {
         currently[factor] = data.currently[factor];
     })
     var hourly = {};
+    hourly.data = [];
     data.hourly.data.map(function(hourlyPred) {
-        return app.locals.FACTOR_LIST.map(function(factor) {
-            hourly[factor] = hourlyPred[factor];
+        //for each hourly prediction, create a temp object
+        var entry = {};
+        app.locals.FACTOR_LIST.map(function(factor) {
+            //for each factor, define new entry in temp object
+            entry[factor] = hourlyPred[factor];
         })
+        hourly.data.push(entry);
     })
 
     // REFORMAT TIME
@@ -94,6 +99,14 @@ function processDarkSkyData(app, jsonData) {
     var dateStr = date.toDateString();
     currently.time = time;
     currently.date = dateStr;
+
+    hourly.data.forEach(function(hourlyPred) {
+        date = new Date(hourlyPred.time * tAdj);
+        time = formatTime(date);
+        dateStr = date.toDateString();
+        hourlyPred.time = time;
+        hourlyPred.date = dateStr;
+    })
 
     processed = {
         'currently': currently,

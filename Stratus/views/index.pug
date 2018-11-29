@@ -43,14 +43,25 @@ block content
         currentlyHTML += "</tr>\n";
 
         // CONSTRUCT TABLE BODY for hourly
-        var hourlyHTML = "<tr>\n";
-
-        hourlyHTML += "</tr>\n";
+        var hourlyHTML = "";
+        data.hourly.data.forEach(function(hourlyPred) {
+          console.log(hourlyPred);
+          hourlyHTML += "<tr>\n"
+          Object.entries(hourlyPred).forEach(function(entry) {
+            hourlyHTML += `<td>${entry[1]}</td>\n`;
+          })
+          hourlyHTML += "</tr>\n";
+        })
 
         $('#weather-currently').html(`<table>${headerHTML}${currentlyHTML}</table>\n`);
-        $('#weather-hourly').html(hourlyHTML);
+        $('#weather-hourly').html(`<table>${headerHTML}${hourlyHTML}</table>\n`);
       })
     })
   
+  h2 Current Weather
   div(id='weather-currently')
+    p Waiting for selection...
+  br
+  h2 Forecast
   div(id='weather-hourly')
+    p Waiting for selection...
